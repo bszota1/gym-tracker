@@ -5,10 +5,12 @@ from backend.app.core.config import get_settings
 from backend.app.core.errors import register_exception_handlers
 from backend.app.core.exceptions import NotFoundError
 from backend.app.core.logging import get_logger, setup_logging
+from backend.app.db.paths import ensure_data_directories
 
 
 def create_app() -> FastAPI:
     setup_logging()
+    ensure_data_directories()
     settings = get_settings()
     logger = get_logger(__name__)
 
