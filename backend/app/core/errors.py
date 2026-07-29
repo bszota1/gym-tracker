@@ -1,4 +1,3 @@
-from email import message
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -10,16 +9,21 @@ from backend.app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
+
 class ErrorBody(BaseModel):
     code: str
     message: str
     details: list[Any] = []
 
+
 class ErrorResponse(BaseModel):
     error: ErrorBody
 
 
-async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
+async def app_error_handler(_request: Request, exc: Exception) -> JSONResponse:
+    if not isinstance(exc, AppError):
+        raise TypeError("Expected AppError") from exc
+
     body = ErrorResponse(
         error=ErrorBody(
             code=exc.code,
@@ -34,7 +38,7 @@ async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
     )
 
 
-async def unhandled_error_handler(request: Request, exc: Exception) -> JSONResponse:
+async def unhandled_error_handler(_request: Request, _exc: Exception) -> JSONResponse:
     logger.exception("Unhandled error")
     body = ErrorResponse(
         error=ErrorBody(

@@ -1,5 +1,6 @@
 from typing import Any
 
+
 class AppError(Exception):
     def __init__(
         self,
@@ -15,8 +16,13 @@ class AppError(Exception):
         self.details = details or []
         super().__init__(message)
 
+
 class NotFoundError(AppError):
-    def __init__(self, message: str = "Resource not found", details: list[Any] | None = None) -> None:
+    def __init__(
+        self,
+        message: str = "Resource not found",
+        details: list[Any] | None = None,
+    ) -> None:
         super().__init__(
             message,
             code="NOT_FOUND",
@@ -24,8 +30,13 @@ class NotFoundError(AppError):
             details=details,
         )
 
+
 class ConflictError(AppError):
-    def __init__(self, message: str = "Conflict", details: list[Any] | None = None) -> None:
+    def __init__(
+        self,
+        message: str = "Conflict",
+        details: list[Any] | None = None,
+    ) -> None:
         super().__init__(
             message,
             code="CONFLICT",
