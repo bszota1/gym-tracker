@@ -1,6 +1,7 @@
 from backend.app.core.config import get_settings
 from pathlib import Path
 
+
 def ensure_data_directories() -> None:
     settings = get_settings()
 
