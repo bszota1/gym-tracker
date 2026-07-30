@@ -7,6 +7,7 @@ dependencies = [
     "aiosqlite",
     "alembic",
     "fastapi",
+    "greenlet>=3.5.4",
     "httpx",
     "joblib",
     "numpy",
