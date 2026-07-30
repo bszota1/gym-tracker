@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.db.models.exercises import Exercise
 
+
 class ExerciseRepository:
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
