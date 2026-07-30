@@ -1,11 +1,15 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
 from alembic.config import Config
 from alembic.script import ScriptDirectory
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from backend.app.api.routes.daily_metrics import router as daily_metrics_router
+from backend.app.api.routes.exercises import router as exercises_router
+from backend.app.api.routes.workout_sessions import router as workout_sessions_router
+from backend.app.api.routes.workout_sets import router as workout_sets_router
 from backend.app.core.config import get_settings
 from backend.app.core.errors import register_exception_handlers
 from backend.app.core.exceptions import NotFoundError
@@ -62,7 +66,7 @@ def create_app() -> FastAPI:
             raise HTTPException(
                 status_code=503,
                 detail={"status": "not_ready", "checks": checks},
-            )
+            ) from None
 
         cfg = Config("alembic.ini")
         script = ScriptDirectory.from_config(cfg)
@@ -92,6 +96,12 @@ def create_app() -> FastAPI:
         settings.api_host,
         settings.api_port,
     )
+
+    app.include_router(daily_metrics_router)
+    app.include_router(exercises_router)
+    app.include_router(workout_sessions_router)
+    app.include_router(workout_sets_router)
+
     return app
 
 
