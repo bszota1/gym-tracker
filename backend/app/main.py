@@ -14,6 +14,7 @@ from backend.app.db.paths import ensure_data_directories
 from backend.app.db.session import engine
 from backend.app.api.routes.daily_metrics import router as daily_metrics_router
 from backend.app.api.routes.exercises import router as exercises_router
+from backend.app.api.routes.workout_sessions import router as workout_sessions_router
 from backend.app.api.routes.workout_sets import router as workout_sets_router
 
 
@@ -98,6 +99,7 @@ def create_app() -> FastAPI:
 
     app.include_router(daily_metrics_router)
     app.include_router(exercises_router)
+    app.include_router(workout_sessions_router)
     app.include_router(workout_sets_router)
 
     return app
