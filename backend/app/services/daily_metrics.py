@@ -66,6 +66,32 @@ class DailyMetricService:
         await self._session.commit()
         return daily_metric
 
+    async def upsert(self, data: DailyMetricCreate) -> DailyMetric:
+        existing = await self._daily_metrics.get_by_date(data.metric_date)
+        now = datetime.now(UTC)
+
+        if existing is None:
+            daily_metric = DailyMetric(
+                metric_date=data.metric_date,
+                body_weight_kg=data.body_weight_kg,
+                calories_kcal=data.calories_kcal,
+                sleep_hours=data.sleep_hours,
+                notes=data.notes,
+                created_at=now,
+                updated_at=now,
+            )
+            created = await self._daily_metrics.create(daily_metric)
+            await self._session.commit()
+            return created
+
+        existing.body_weight_kg = data.body_weight_kg
+        existing.calories_kcal = data.calories_kcal
+        existing.sleep_hours = data.sleep_hours
+        existing.notes = data.notes
+        existing.updated_at = now
+        await self._session.commit()
+        return existing
+
     async def delete(self, metric_date: date) -> None:
         daily_metric = await self.get_by_date(metric_date)
 

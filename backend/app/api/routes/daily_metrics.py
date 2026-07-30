@@ -59,9 +59,31 @@ async def get_daily_metric(
     return DailyMetricResponse.model_validate(daily_metric)
 
 
+@router.put(
+    "/api/v1/daily-metrics/{metric_date}",
+    response_model=DailyMetricResponse,
+    summary="Create or fully replace daily metrics for a date",
+)
+async def upsert_daily_metric(
+    metric_date: date,
+    data: DailyMetricUpdate,
+    service: DailyMetricService = Depends(get_daily_metric_service),
+) -> DailyMetricResponse:
+    payload = DailyMetricCreate(
+        metric_date=metric_date,
+        body_weight_kg=data.body_weight_kg,
+        calories_kcal=data.calories_kcal,
+        sleep_hours=data.sleep_hours,
+        notes=data.notes,
+    )
+    daily_metric = await service.upsert(payload)
+    return DailyMetricResponse.model_validate(daily_metric)
+
+
 @router.patch(
     "/api/v1/daily-metrics/{metric_date}",
     response_model=DailyMetricResponse,
+    summary="Partially update daily metrics",
 )
 async def update_daily_metric(
     metric_date: date,
