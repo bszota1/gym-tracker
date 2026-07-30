@@ -40,6 +40,7 @@ class WorkoutSetUpdate(BaseModel):
             raise ValueError("RPE must use 0.5 step")
         return value
 
+
 class WorkoutSetResponse(APIModel):
     id: int
     session_id: int
