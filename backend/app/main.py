@@ -12,6 +12,7 @@ from backend.app.core.exceptions import NotFoundError
 from backend.app.core.logging import get_logger, setup_logging
 from backend.app.db.paths import ensure_data_directories
 from backend.app.db.session import engine
+from backend.app.api.routes.workout_sets import router as workout_sets_router
 
 
 def create_app() -> FastAPI:
@@ -92,6 +93,9 @@ def create_app() -> FastAPI:
         settings.api_host,
         settings.api_port,
     )
+
+    app.include_router(workout_sets_router)
+
     return app
 
 
