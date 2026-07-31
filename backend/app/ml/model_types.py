@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 MODEL_TYPE_PROPHET_ONE_RM = "prophet_one_rm"
+MODEL_TYPE_ISOLATION_FOREST = "isolation_forest_one_rm"
 MODEL_RUN_STATUS_SUCCESS = "SUCCESS"
 MODEL_RUN_STATUS_FAILED = "FAILED"
 MODEL_RUN_STATUS_PENDING = "PENDING"
