@@ -41,10 +41,7 @@ async def list_daily_metrics(
     service: DailyMetricService = Depends(get_daily_metric_service),
 ) -> list[DailyMetricResponse]:
     daily_metrics = await service.list(date_from=date_from, date_to=date_to)
-    return [
-        DailyMetricResponse.model_validate(daily_metric)
-        for daily_metric in daily_metrics
-    ]
+    return [DailyMetricResponse.model_validate(daily_metric) for daily_metric in daily_metrics]
 
 
 @router.get(

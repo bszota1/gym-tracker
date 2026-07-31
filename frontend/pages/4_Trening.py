@@ -100,20 +100,12 @@ def _load_sets(session_id: int) -> list[dict[str, Any]]:
 
 
 def _next_set_number(sets: list[dict[str, Any]], exercise_id: int) -> int:
-    numbers = [
-        int(item["set_number"])
-        for item in sets
-        if int(item["exercise_id"]) == exercise_id
-    ]
+    numbers = [int(item["set_number"]) for item in sets if int(item["exercise_id"]) == exercise_id]
     return (max(numbers) + 1) if numbers else 1
 
 
-def _last_set_for_exercise(
-    sets: list[dict[str, Any]], exercise_id: int
-) -> dict[str, Any] | None:
-    matching = [
-        item for item in sets if int(item["exercise_id"]) == exercise_id
-    ]
+def _last_set_for_exercise(sets: list[dict[str, Any]], exercise_id: int) -> dict[str, Any] | None:
+    matching = [item for item in sets if int(item["exercise_id"]) == exercise_id]
     if not matching:
         return None
     return max(matching, key=lambda item: int(item["set_number"]))
@@ -171,8 +163,7 @@ else:
     empty_state(
         "Brak sesji dla tej daty.",
         next_step=(
-            "Utwórz sesję świadomie przyciskiem poniżej — "
-            "nie powstanie sama przy odświeżeniu."
+            "Utwórz sesję świadomie przyciskiem poniżej — nie powstanie sama przy odświeżeniu."
         ),
     )
     if st.button("Utwórz sesję", type="primary"):
@@ -210,9 +201,7 @@ name_by_id = _exercise_name_map(all_exercises_for_names)
 
 st.subheader("Podsumowanie sesji")
 exercise_ids = {int(item["exercise_id"]) for item in sets}
-st.write(
-    f"Ćwiczenia: **{len(exercise_ids)}** · Serie: **{len(sets)}**"
-)
+st.write(f"Ćwiczenia: **{len(exercise_ids)}** · Serie: **{len(sets)}**")
 if not sets:
     empty_state(
         "Ta sesja nie ma jeszcze serii.",
@@ -222,8 +211,7 @@ if not sets:
 st.divider()
 st.subheader("Dodaj serię")
 st.caption(
-    "RPE: skala 1–10 z krokiem 0.5 (opcjonalnie). "
-    "1RM liczy backend — UI tylko wyświetla wynik."
+    "RPE: skala 1–10 z krokiem 0.5 (opcjonalnie). 1RM liczy backend — UI tylko wyświetla wynik."
 )
 
 if not exercises:
@@ -233,8 +221,9 @@ if not exercises:
     )
 else:
     exercise_labels = {
-        f"{item['name']}"
-        + (f" · {item['muscle_group']}" if item.get("muscle_group") else ""): int(item["id"])
+        f"{item['name']}" + (f" · {item['muscle_group']}" if item.get("muscle_group") else ""): int(
+            item["id"]
+        )
         for item in exercises
     }
     label_list = list(exercise_labels.keys())
@@ -256,9 +245,7 @@ else:
     previous = _last_set_for_exercise(sets, exercise_id)
     copy_defaults = st.session_state.pop(COPY_SET_KEY, None)
 
-    if previous is not None and st.button(
-        "Przepisz wartości poprzedniej serii tego ćwiczenia"
-    ):
+    if previous is not None and st.button("Przepisz wartości poprzedniej serii tego ćwiczenia"):
         st.session_state[COPY_SET_KEY] = {
             "weight_kg": _to_float(previous.get("weight_kg")) or 0.0,
             "reps": _to_int(previous.get("reps")) or 1,

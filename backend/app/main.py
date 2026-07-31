@@ -6,7 +6,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from backend.app.api.routes.analytics import router as analytics_router
 from backend.app.api.routes.daily_metrics import router as daily_metrics_router
+from backend.app.api.routes.data_protection import router as data_protection_router
 from backend.app.api.routes.exercises import router as exercises_router
 from backend.app.api.routes.workout_sessions import router as workout_sessions_router
 from backend.app.api.routes.workout_sets import router as workout_sets_router
@@ -101,6 +103,8 @@ def create_app() -> FastAPI:
     app.include_router(exercises_router)
     app.include_router(workout_sessions_router)
     app.include_router(workout_sets_router)
+    app.include_router(analytics_router)
+    app.include_router(data_protection_router)
 
     return app
 
