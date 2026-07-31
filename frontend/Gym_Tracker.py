@@ -14,5 +14,6 @@ st.markdown(
 2. **Ćwiczenia** - katalog i archiwizacja
 3. **Trening** - sesja, serie, 1RM
 4. **Historia metryk** - przegląd zakresu dat
+5. **Analityka** - trendy i przegląd
 """
 )

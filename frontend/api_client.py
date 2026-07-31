@@ -368,6 +368,80 @@ def delete_set(set_id: int) -> None:
     _request("DELETE", f"/sets/{set_id}")
 
 
+def get_body_weight_analytics(
+    date_from: date | str,
+    date_to: date | str,
+) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/analytics/body-weight",
+        params={
+            "date_from": _as_date_str(date_from),
+            "date_to": _as_date_str(date_to),
+        },
+    )
+
+
+def get_one_rm_analytics(
+    *,
+    exercise_id: int,
+    date_from: date | str,
+    date_to: date | str,
+) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/analytics/one-rm",
+        params={
+            "exercise_id": exercise_id,
+            "date_from": _as_date_str(date_from),
+            "date_to": _as_date_str(date_to),
+        },
+    )
+
+
+def get_strength_vs_weight(
+    *,
+    exercise_id: int,
+    date_from: date | str,
+    date_to: date | str,
+) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/analytics/strength-vs-weight",
+        params={
+            "exercise_id": exercise_id,
+            "date_from": _as_date_str(date_from),
+            "date_to": _as_date_str(date_to),
+        },
+    )
+
+
+def get_recovery(
+    date_from: date | str,
+    date_to: date | str,
+    *,
+    exercise_id: int | None = None,
+) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/analytics/recovery",
+        params=_drop_none(
+            {
+                "date_from": _as_date_str(date_from),
+                "date_to": _as_date_str(date_to),
+                "exercise_id": exercise_id,
+            }
+        ),
+    )
+
+
+def get_overview(as_of: date | str | None = None) -> dict[str, Any]:
+    params = (
+        {"as_of": _as_date_str(as_of)} if as_of is not None else None
+    )
+    return _request("GET", "/analytics/overview", params=params)
+
+
 def check_health(timeout_seconds: float = 5.0) -> tuple[bool, str]:
     url = f"{get_api_root()}/health"
     try:
