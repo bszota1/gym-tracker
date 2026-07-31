@@ -5,6 +5,7 @@ from datetime import date
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.analytics.queries import AnalyticsQueries
+from backend.app.ml.fingerprint import compute_dataset_fingerprint
 from backend.app.ml.metrics_join import join_daily_metrics
 from backend.app.ml.observations import select_daily_strength_observations
 from backend.app.ml.pipeline_contract import (
@@ -43,15 +44,20 @@ class FeatureDatasetBuilder:
 
         joined = join_daily_metrics(observations, metric_rows)
         rows = add_temporal_features(joined)
+        fingerprint = compute_dataset_fingerprint(
+            rows,
+            exercise_id=pipeline_input.exercise_id,
+            feature_pipeline_version=FEATURE_PIPELINE_VERSION,
+        )
         meta = PipelineMeta(
             exercise_id=pipeline_input.exercise_id,
             feature_pipeline_version=FEATURE_PIPELINE_VERSION,
             date_from=rows[0]["date"] if rows else pipeline_input.date_from,
             date_to=rows[-1]["date"] if rows else pipeline_input.date_to,
             sample_count=len(rows),
-            fingerprint=None,
+            fingerprint=fingerprint,
             extras={
-                "stage": "temporal_features",
+                "stage": "fingerprinted",
                 "forward_fill": False,
             },
         )
