@@ -116,9 +116,7 @@ class WorkoutSetService:
         return workout_set
 
     async def list_by_session(self, session_id: int) -> list[WorkoutSet]:
-        workout_session: WorkoutSession | None = await self._session.get(
-            WorkoutSession, session_id
-        )
+        workout_session: WorkoutSession | None = await self._session.get(WorkoutSession, session_id)
         if workout_session is None:
             raise NotFoundError("Workout session not found")
         return await self._sets.list_by_session(session_id)

@@ -49,9 +49,7 @@ async def list_sessions(
         date_to=date_to,
         split_type=split_type.value if split_type is not None else None,
     )
-    return [
-        WorkoutSessionResponse.model_validate(session) for session in sessions
-    ]
+    return [WorkoutSessionResponse.model_validate(session) for session in sessions]
 
 
 @router.get(

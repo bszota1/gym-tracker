@@ -105,9 +105,7 @@ def _request(
             logger.warning("API timeout %s %s (attempt %s)", method_upper, url, attempt)
         except httpx.TransportError as exc:
             last_error = ApiConnectionError("API connection failed", cause=exc)
-            logger.warning(
-                "API connection error %s %s (attempt %s)", method_upper, url, attempt
-            )
+            logger.warning("API connection error %s %s (attempt %s)", method_upper, url, attempt)
         else:
             if response.status_code == 204:
                 return None
@@ -296,9 +294,7 @@ def update_session(
         f"/sessions/{session_id}",
         json=_drop_none(
             {
-                "workout_date": (
-                    _as_date_str(workout_date) if workout_date is not None else None
-                ),
+                "workout_date": (_as_date_str(workout_date) if workout_date is not None else None),
                 "split_type": split_type,
                 "notes": notes,
             }
