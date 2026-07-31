@@ -35,7 +35,7 @@ run-api:
 	uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 
 run-frontend:
-	uv run streamlit run frontend/app.py
+	uv run streamlit run frontend/Gym_Tracker.py --server.address 127.0.0.1
 
 test:
 	uv run pytest

@@ -1,14 +1,15 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from datetime import UTC, datetime
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.exceptions import ConflictError, NotFoundError
 from backend.app.db.models.exercises import Exercise
 from backend.app.db.models.workout_session import WorkoutSession
 from backend.app.db.models.workout_sets import WorkoutSet
+from backend.app.domain.one_rm import calculate_1rm
 from backend.app.repositories.workout_sets import WorkoutSetRepository
 from backend.app.schemas.workout_sets import WorkoutSetCreate, WorkoutSetUpdate
-from backend.app.domain.one_rm import calculate_1rm
 
 
 class WorkoutSetService:
@@ -113,3 +114,11 @@ class WorkoutSetService:
         if workout_set is None:
             raise NotFoundError("Workout set not found")
         return workout_set
+
+    async def list_by_session(self, session_id: int) -> list[WorkoutSet]:
+        workout_session: WorkoutSession | None = await self._session.get(
+            WorkoutSession, session_id
+        )
+        if workout_session is None:
+            raise NotFoundError("Workout session not found")
+        return await self._sets.list_by_session(session_id)
