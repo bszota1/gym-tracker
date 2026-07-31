@@ -13,6 +13,7 @@ from backend.app.ml.pipeline_contract import (
     PipelineMeta,
     PipelineResult,
 )
+from backend.app.ml.temporal_features import add_temporal_features
 
 
 class FeatureDatasetBuilder:
@@ -40,7 +41,8 @@ class FeatureDatasetBuilder:
         else:
             metric_rows = []
 
-        rows = join_daily_metrics(observations, metric_rows)
+        joined = join_daily_metrics(observations, metric_rows)
+        rows = add_temporal_features(joined)
         meta = PipelineMeta(
             exercise_id=pipeline_input.exercise_id,
             feature_pipeline_version=FEATURE_PIPELINE_VERSION,
@@ -49,7 +51,7 @@ class FeatureDatasetBuilder:
             sample_count=len(rows),
             fingerprint=None,
             extras={
-                "stage": "base_observations_with_metrics",
+                "stage": "temporal_features",
                 "forward_fill": False,
             },
         )

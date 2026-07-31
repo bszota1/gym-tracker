@@ -13,6 +13,8 @@ from backend.app.domain.analytics_defs import (
 )
 
 FEATURE_PIPELINE_VERSION = "1"
+SHORT_ROLLING_OBSERVATIONS = ROLLING_WINDOW_DAYS
+LONG_ROLLING_OBSERVATIONS = 28
 
 REQUIRED_DAILY_COLUMNS: tuple[str, ...] = (
     "date",
@@ -29,6 +31,7 @@ REQUIRED_DAILY_COLUMNS: tuple[str, ...] = (
     "sleep_missing",
     "calories_missing",
     "volume_kg",
+    "prev_volume_kg",
     "days_since_prev_session",
     "one_rm_delta",
     "one_rm_roll_7",

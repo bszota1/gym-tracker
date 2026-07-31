@@ -79,10 +79,6 @@ def join_daily_metrics(
                 "body_weight_missing": body_weight is None,
                 "sleep_missing": sleep_hours is None,
                 "calories_missing": calories is None,
-                "days_since_prev_session": None,
-                "one_rm_delta": None,
-                "one_rm_roll_7": None,
-                "one_rm_roll_28": None,
             }
         )
     return joined

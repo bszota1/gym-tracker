@@ -61,4 +61,4 @@ def test_join_metrics_keeps_nulls_without_forward_fill() -> None:
     assert joined[1]["body_weight_missing"] is True
     assert joined[1]["sleep_missing"] is True
     assert joined[1]["calories_missing"] is True
-    assert joined[0]["one_rm_roll_7"] is None
+    assert "one_rm_roll_7" not in joined[0]
