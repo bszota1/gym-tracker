@@ -442,6 +442,63 @@ def get_overview(as_of: date | str | None = None) -> dict[str, Any]:
     return _request("GET", "/analytics/overview", params=params)
 
 
+def create_backup() -> dict[str, Any]:
+    return _request("POST", "/backups")
+
+
+def list_backups() -> list[dict[str, Any]]:
+    return _request("GET", "/backups")
+
+
+def create_export() -> dict[str, Any]:
+    return _request("POST", "/exports")
+
+
+def list_exports() -> list[dict[str, Any]]:
+    return _request("GET", "/exports")
+
+
+def dry_run_import(file_name: str, file_bytes: bytes) -> dict[str, Any]:
+    return _upload("POST", "/imports/dry-run", file_name=file_name, file_bytes=file_bytes)
+
+
+def apply_import(file_name: str, file_bytes: bytes) -> dict[str, Any]:
+    return _upload("POST", "/imports", file_name=file_name, file_bytes=file_bytes)
+
+
+def apply_import_from_export(filename: str) -> dict[str, Any]:
+    return _request("POST", f"/imports/from-export/{filename}")
+
+
+def _upload(
+    method: str,
+    path: str,
+    *,
+    file_name: str,
+    file_bytes: bytes,
+    timeout: float = DEFAULT_TIMEOUT,
+) -> Any:
+    url = f"{get_api_base_url().rstrip('/')}/{path.lstrip('/')}"
+    try:
+        response = httpx.request(
+            method.upper(),
+            url,
+            files={"file": (file_name, file_bytes, "application/zip")},
+            timeout=timeout,
+        )
+    except httpx.TimeoutException as exc:
+        raise ApiTimeoutError("API request timed out", cause=exc) from exc
+    except httpx.TransportError as exc:
+        raise ApiConnectionError("API connection failed", cause=exc) from exc
+
+    if response.status_code == 204:
+        return None
+    _raise_for_status(response)
+    if not response.content:
+        return None
+    return response.json()
+
+
 def check_health(timeout_seconds: float = 5.0) -> tuple[bool, str]:
     url = f"{get_api_root()}/health"
     try:

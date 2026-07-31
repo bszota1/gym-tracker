@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     api_port: int = 8000
     api_base_url: str = "http://127.0.0.1:8000/api/v1"
     model_dir: str = "./data/models"
+    backup_dir: str = "./data/backups"
+    export_dir: str = "./data/exports"
     log_level: str = "INFO"
 
 
