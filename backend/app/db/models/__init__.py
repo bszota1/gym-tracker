@@ -1,3 +1,4 @@
+from backend.app.db.models.alert_feedback import AlertFeedback
 from backend.app.db.models.daily_metrics import DailyMetric
 from backend.app.db.models.exercises import Exercise
 from backend.app.db.models.model_runs import ModelRun
@@ -12,4 +13,5 @@ __all__ = [
     "WorkoutSet",
     "StrengthGoal",
     "ModelRun",
+    "AlertFeedback",
 ]

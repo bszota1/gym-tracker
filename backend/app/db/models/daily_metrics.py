@@ -1,9 +1,10 @@
-from backend.app.db.base import TimestampMixin, Base
 from datetime import date
 from decimal import Decimal
 
 from sqlalchemy import CheckConstraint, Date, Integer, Numeric, Text
 from sqlalchemy.orm import Mapped, mapped_column
+
+from backend.app.db.base import Base, TimestampMixin
 
 
 class DailyMetric(TimestampMixin, Base):

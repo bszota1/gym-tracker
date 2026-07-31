@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import joblib
 from prophet import Prophet
@@ -17,9 +18,13 @@ def model_dir() -> Path:
 def resolve_trusted_artifact_path(artifact_path: str, *, root: Path | None = None) -> Path:
     base = (root or model_dir()).resolve()
     path = Path(artifact_path)
-    if not path.is_absolute():
-        path = base / path
-    resolved = path.resolve()
+    if path.is_absolute():
+        raise AppError(
+            "Absolute artifact paths are not allowed; use a path under model_dir",
+            code=ERROR_INFERENCE,
+            status_code=500,
+        )
+    resolved = (base / path).resolve()
     try:
         resolved.relative_to(base)
     except ValueError as exc:
@@ -31,18 +36,23 @@ def resolve_trusted_artifact_path(artifact_path: str, *, root: Path | None = Non
     return resolved
 
 
-def save_prophet_artifact(model: Prophet, relative_name: str, *, root: Path | None = None) -> Path:
+def save_joblib_artifact(
+    obj: Any,
+    relative_name: str,
+    *,
+    root: Path | None = None,
+) -> Path:
     base = root or model_dir()
     base.mkdir(parents=True, exist_ok=True)
     path = resolve_trusted_artifact_path(relative_name, root=base)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    joblib.dump(model, tmp)
+    joblib.dump(obj, tmp)
     tmp.replace(path)
     return path
 
 
-def load_prophet_artifact(artifact_path: str, *, root: Path | None = None) -> Prophet:
+def load_joblib_artifact(artifact_path: str, *, root: Path | None = None) -> Any:
     path = resolve_trusted_artifact_path(artifact_path, root=root)
     if not path.is_file():
         raise AppError(
@@ -51,7 +61,7 @@ def load_prophet_artifact(artifact_path: str, *, root: Path | None = None) -> Pr
             status_code=500,
         )
     try:
-        model = joblib.load(path)
+        return joblib.load(path)
     except Exception as exc:
         raise AppError(
             "Failed to load model artifact",
@@ -59,6 +69,19 @@ def load_prophet_artifact(artifact_path: str, *, root: Path | None = None) -> Pr
             status_code=500,
             details=[str(exc)],
         ) from exc
+
+
+def save_prophet_artifact(
+    model: Prophet,
+    relative_name: str,
+    *,
+    root: Path | None = None,
+) -> Path:
+    return save_joblib_artifact(model, relative_name, root=root)
+
+
+def load_prophet_artifact(artifact_path: str, *, root: Path | None = None) -> Prophet:
+    model = load_joblib_artifact(artifact_path, root=root)
     if not isinstance(model, Prophet):
         raise AppError(
             "Loaded artifact is not a Prophet model",

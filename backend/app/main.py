@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from backend.app.api.routes.alert_feedback import router as alert_feedback_router
 from backend.app.api.routes.analytics import router as analytics_router
 from backend.app.api.routes.daily_metrics import router as daily_metrics_router
 from backend.app.api.routes.data_protection import router as data_protection_router
@@ -109,6 +110,7 @@ def create_app() -> FastAPI:
     app.include_router(data_protection_router)
     app.include_router(strength_goals_router)
     app.include_router(forecasts_router)
+    app.include_router(alert_feedback_router)
 
     return app
 

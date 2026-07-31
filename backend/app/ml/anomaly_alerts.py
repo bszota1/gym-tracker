@@ -5,6 +5,7 @@ from datetime import date
 
 from backend.app.ml.anomaly_features import AnomalyFeatureRow
 
+DROP_ALERT_THRESHOLD_VERSION = "1"
 NEGATIVE_DROP_PCT_THRESHOLD = -5.0
 
 

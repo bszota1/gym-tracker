@@ -11,6 +11,9 @@ class ModelRunRepository:
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
+    async def get_by_id(self, run_id: int) -> ModelRun | None:
+        return await self._session.get(ModelRun, run_id)
+
     async def get_latest_success(
         self,
         *,
