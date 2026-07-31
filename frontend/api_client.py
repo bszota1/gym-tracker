@@ -470,6 +470,134 @@ def apply_import_from_export(filename: str) -> dict[str, Any]:
     return _request("POST", f"/imports/from-export/{filename}")
 
 
+def list_strength_goals(
+    *,
+    exercise_id: int | None = None,
+    status: str | None = None,
+) -> list[dict[str, Any]]:
+    return _request(
+        "GET",
+        "/strength-goals",
+        params=_drop_none({"exercise_id": exercise_id, "status": status}),
+    )
+
+
+def create_strength_goal(
+    *,
+    exercise_id: int,
+    target_1rm_kg: Decimal | float | str,
+    target_date: date | str | None = None,
+) -> dict[str, Any]:
+    return _request(
+        "POST",
+        "/strength-goals",
+        json=_drop_none(
+            {
+                "exercise_id": exercise_id,
+                "target_1rm_kg": _as_json_number(target_1rm_kg),
+                "target_date": (
+                    _as_date_str(target_date) if target_date is not None else None
+                ),
+            }
+        ),
+    )
+
+
+def update_strength_goal(
+    goal_id: int,
+    *,
+    target_1rm_kg: Decimal | float | str | None = None,
+    target_date: date | str | None = None,
+    status: str | None = None,
+) -> dict[str, Any]:
+    return _request(
+        "PATCH",
+        f"/strength-goals/{goal_id}",
+        json=_drop_none(
+            {
+                "target_1rm_kg": _as_json_number(target_1rm_kg),
+                "target_date": (
+                    _as_date_str(target_date) if target_date is not None else None
+                ),
+                "status": status,
+            }
+        ),
+    )
+
+
+def get_strength_forecast(*, exercise_id: int, goal_id: int) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/forecasts/strength",
+        params={"exercise_id": exercise_id, "goal_id": goal_id},
+    )
+
+
+def get_model_status(*, exercise_id: int, model_type: str) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/models/status",
+        params={"exercise_id": exercise_id, "model_type": model_type},
+    )
+
+
+def train_forecast_model(*, exercise_id: int) -> dict[str, Any]:
+    return _request(
+        "POST",
+        "/models/train/forecast",
+        params={"exercise_id": exercise_id},
+        timeout=120.0,
+    )
+
+
+def train_anomaly_model(*, exercise_id: int) -> dict[str, Any]:
+    return _request(
+        "POST",
+        "/models/train/anomalies",
+        params={"exercise_id": exercise_id},
+        timeout=120.0,
+    )
+
+
+def list_anomalies(*, exercise_id: int) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/anomalies",
+        params={"exercise_id": exercise_id},
+    )
+
+
+def create_alert_feedback(
+    *,
+    exercise_id: int,
+    alert_date: date | str,
+    model_type: str,
+    rating: str,
+    model_run_id: int | None = None,
+) -> dict[str, Any]:
+    return _request(
+        "POST",
+        "/anomaly-alerts/feedback",
+        json=_drop_none(
+            {
+                "exercise_id": exercise_id,
+                "alert_date": _as_date_str(alert_date),
+                "model_type": model_type,
+                "rating": rating,
+                "model_run_id": model_run_id,
+            }
+        ),
+    )
+
+
+def get_weight_suggestion(*, exercise_id: int) -> dict[str, Any]:
+    return _request(
+        "GET",
+        "/weight-suggestions",
+        params={"exercise_id": exercise_id},
+    )
+
+
 def _upload(
     method: str,
     path: str,

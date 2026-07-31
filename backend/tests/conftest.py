@@ -24,12 +24,15 @@ def client(
     db_path = tmp_path / "test.db"
     backup_path = tmp_path / "backups"
     export_path = tmp_path / "exports"
+    model_path = tmp_path / "models"
     backup_path.mkdir()
     export_path.mkdir()
+    model_path.mkdir()
 
     monkeypatch.setenv("GYM_DATABASE_URL", f"sqlite+aiosqlite:///{db_path}")
     monkeypatch.setenv("GYM_BACKUP_DIR", str(backup_path))
     monkeypatch.setenv("GYM_EXPORT_DIR", str(export_path))
+    monkeypatch.setenv("GYM_MODEL_DIR", str(model_path))
     get_settings.cache_clear()
 
     engine = create_async_engine(f"sqlite+aiosqlite:///{db_path}", echo=False)
@@ -62,6 +65,7 @@ def client(
     app.dependency_overrides[get_db] = override_get_db
 
     with TestClient(app) as test_client:
+        test_client.session_factory = session_factory  # type: ignore[attr-defined]
         yield test_client
 
     app.dependency_overrides.clear()
