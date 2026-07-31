@@ -31,6 +31,18 @@ async def create_set(
 
 
 @router.get(
+    "/api/v1/sessions/{session_id}/sets",
+    response_model=list[WorkoutSetResponse],
+)
+async def list_session_sets(
+    session_id: int,
+    service: WorkoutSetService = Depends(get_workout_set_service),
+) -> list[WorkoutSetResponse]:
+    workout_sets = await service.list_by_session(session_id)
+    return [WorkoutSetResponse.model_validate(item) for item in workout_sets]
+
+
+@router.get(
     "/api/v1/sets/{set_id}",
     response_model=WorkoutSetResponse,
 )
