@@ -37,7 +37,7 @@ def add_temporal_features(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return []
 
     frame = pd.DataFrame.from_records(rows)
-    frame["date"] = frame["date"].map(_as_date)
+    frame["date"] = pd.to_datetime(frame["date"].map(_as_date))
     frame = frame.sort_values("date", kind="mergesort").reset_index(drop=True)
 
     one_rm = frame["one_rm_kg"].astype(float)

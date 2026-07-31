@@ -10,6 +10,7 @@ from backend.app.api.routes.analytics import router as analytics_router
 from backend.app.api.routes.daily_metrics import router as daily_metrics_router
 from backend.app.api.routes.data_protection import router as data_protection_router
 from backend.app.api.routes.exercises import router as exercises_router
+from backend.app.api.routes.forecasts import router as forecasts_router
 from backend.app.api.routes.strength_goals import router as strength_goals_router
 from backend.app.api.routes.workout_sessions import router as workout_sessions_router
 from backend.app.api.routes.workout_sets import router as workout_sets_router
@@ -107,6 +108,7 @@ def create_app() -> FastAPI:
     app.include_router(analytics_router)
     app.include_router(data_protection_router)
     app.include_router(strength_goals_router)
+    app.include_router(forecasts_router)
 
     return app
 
