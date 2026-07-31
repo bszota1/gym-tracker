@@ -347,7 +347,7 @@ with tab_anomalies:
         show_api_error(exc)
 
 with tab_weight:
-    st.subheader("Sugestia ciężaru (opcjonalna)")
+    st.subheader("Sugestia ciężaru")
     try:
         suggestion = get_weight_suggestion(exercise_id=exercise_id)
         if suggestion.get("status") == "INSUFFICIENT_DATA":

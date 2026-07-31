@@ -331,7 +331,7 @@ else:
                 st.session_state["last_set_fingerprint"] = fingerprint
                 st.success(
                     f"Dodano serię #{created['set_number']}. "
-                    f"1RM z API: {created['calculated_1rm']} kg"
+                    f"1RM: {created['calculated_1rm']} kg"
                 )
                 st.session_state[SUBMIT_LOCK_KEY] = False
                 st.rerun()
@@ -341,7 +341,7 @@ else:
 
     last_1rm = st.session_state.get(LAST_1RM_KEY)
     if last_1rm is not None:
-        st.info(f"Ostatnio zapisany 1RM (z API): **{last_1rm} kg**")
+        st.info(f"Ostatnio zapisany 1RM: **{last_1rm} kg**")
 
 st.divider()
 st.subheader("Serie w sesji")
@@ -420,7 +420,7 @@ else:
                         invalidate_workout_cache()
                         st.session_state[LAST_1RM_KEY] = updated.get("calculated_1rm")
                         st.success(
-                            f"Zaktualizowano serię. Nowy 1RM z API: {updated['calculated_1rm']} kg"
+                            f"Zaktualizowano serię. Nowy 1RM: {updated['calculated_1rm']} kg"
                         )
                         st.rerun()
                     except ApiClientError as exc:
