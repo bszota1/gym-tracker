@@ -65,7 +65,6 @@ def _seed_rising_history(client, exercise_id: int, *, count: int = 10) -> list[d
             weight_kg=str(weight),
             reps=5,
         )
-        # Epley approx stored by API; for fingerprint we rebuild from observations later
         rows.append({"date": day, "one_rm_kg": float(weight) * (1 + 5 / 30)})
     return rows
 

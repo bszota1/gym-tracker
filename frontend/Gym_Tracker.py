@@ -16,5 +16,6 @@ st.markdown(
 4. **Historia metryk** - przegląd zakresu dat
 5. **Analityka** - trendy i przegląd
 6. **Dane** - eksport, import, backup
+7. **Cele i modele** - cele 1RM, prognoza, anomalie, sugestia ciężaru
 """
 )
