@@ -23,7 +23,7 @@ from data_cache import (
 )
 from ui import check_api_available, configure_page, empty_state, show_api_error
 
-SPLIT_TYPES = ("PUSH", "PULL", "LEGS", "OTHER")
+SPLIT_TYPES = ("PUSH", "PULL", "LEGS", "UPPER", "LOWER", "OTHER")
 ACTIVE_SESSION_KEY = "active_session_id"
 SELECTED_EXERCISE_KEY = "workout_selected_exercise_id"
 SUBMIT_LOCK_KEY = "workout_set_submitting"

@@ -10,7 +10,7 @@ class WorkoutSession(TimestampMixin, Base):
     __tablename__ = "workout_sessions"
     __table_args__ = (
         CheckConstraint(
-            "split_type IN ('PUSH', 'PULL', 'LEGS', 'OTHER')",
+            "split_type IN ('PUSH', 'PULL', 'LEGS', 'UPPER', 'LOWER', 'OTHER')",
             name="split_type_allowed",
         ),
         Index("ix_sessions_workout_date", "workout_date"),
